@@ -56,4 +56,54 @@ public class TestCases {
             System.out.println(name + " " + gender + " " + fee);
         }
     }
+
+    @Test
+    public void test2() throws SQLException{
+        ResultSet rs;
+        rs = statement.executeQuery("SELECT first_name, gender, fee FROM students limit 10;");
+        String name;
+        String gender;
+        String fee;
+        // This will give exception. Because by default, the curser is before the first row.
+        /*
+        name = rs.getString(1);
+        gender = rs.getString(2);
+        fee = rs.getString(3);
+        */
+
+        while (rs.next()) {
+            name = rs.getString(1);
+            gender = rs.getString(2);
+            fee = rs.getString(3);
+            System.out.println(name + " " + gender + " " + fee);
+        }
+
+        System.out.println("-----------------------------");
+        rs.absolute(2);
+        name = rs.getString(1);
+        gender = rs.getString(2);
+        fee = rs.getString(3);
+        System.out.println(name + " " + gender + " " + fee);
+
+        System.out.println("-----------------------------");
+        rs.relative(3);
+        name = rs.getString(1);
+        gender = rs.getString(2);
+        fee = rs.getString(3);
+        System.out.println(name + " " + gender + " " + fee);
+
+        System.out.println("-----------------------------");
+        rs.last();
+        name = rs.getString(1);
+        gender = rs.getString(2);
+        fee = rs.getString(3);
+        System.out.println(name + " " + gender + " " + fee);
+
+        System.out.println("-----------------------------");
+        rs.relative(-5);
+        name = rs.getString(1);
+        gender = rs.getString(2);
+        fee = rs.getString(3);
+        System.out.println(name + " " + gender + " " + fee);
+    }
 }
