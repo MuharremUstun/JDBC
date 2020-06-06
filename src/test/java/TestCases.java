@@ -31,7 +31,7 @@ public class TestCases {
 
         ResultSet rs;
         System.out.println("Before the update of the db.");
-        rs = statement.executeQuery("SELECT first_name, gender, fee FROM students limit 10;");
+        rs = statement.executeQuery("SELECT first_name, gender, fee FROM students limit 20;");
         while (rs.next()) {
             String name = rs.getString(1);
             String gender = rs.getString(2);
@@ -39,10 +39,16 @@ public class TestCases {
             System.out.println(name + " " + gender + " " + fee);
         }
 
-        statement.executeUpdate("UPDATE students SET fee = (fee * .9) WHERE gender = 'Female' limit 10;");
+//        statement.executeUpdate("UPDATE students SET fee = (fee * .9) WHERE gender = 'Female';");
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE students SET fee = (fee * ?) WHERE gender = ?;"
+        );
+        preparedStatement.setDouble(1, 1.15);
+        preparedStatement.setString(2, "Male");
+        preparedStatement.executeUpdate();
 
         System.out.println("\nAfter the update of the db.");
-        rs = statement.executeQuery("SELECT first_name, gender, fee FROM students limit 10;");
+        rs = statement.executeQuery("SELECT first_name, gender, fee FROM students limit 20;");
         while (rs.next()) {
             String name = rs.getString(1);
             String gender = rs.getString(2);
