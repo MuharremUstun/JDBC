@@ -50,9 +50,9 @@ public class TestCases {
         System.out.println("\nAfter the update of the db.");
         rs = statement.executeQuery("SELECT first_name, gender, fee FROM students limit 20;");
         while (rs.next()) {
-            String name = rs.getString(1);
-            String gender = rs.getString(2);
-            String fee = rs.getString(3);
+            String name = rs.getString("first_name");
+            String gender = rs.getString("gender");
+            Double fee = rs.getDouble("fee");
             System.out.println(name + " " + gender + " " + fee);
         }
     }
