@@ -45,9 +45,32 @@ public class TestPractice {
         while (resultSet.next()) {
             String firstName = resultSet.getString("first_name");
             String lastName = resultSet.getString("last_name");
-            String fee = resultSet.getString("fee");
+            Double fee = resultSet.getDouble("fee");
             System.out.println(firstName + " " + lastName + " " + fee);
         }
     }
 
+    @Test
+    public void testFifthStudentsWithHighestFee() throws SQLException {
+        ResultSet resultSet = statement.executeQuery(
+                "SELECT first_name, last_name, fee FROM students ORDER BY fee DESC LIMIT 20;");
+        resultSet.absolute(5);
+        String firstName = resultSet.getString("first_name");
+        String lastName = resultSet.getString("last_name");
+        Double fee = resultSet.getDouble("fee");
+        System.out.println(firstName + " " + lastName + " " + fee);
+    }
+
+    @Test
+    public void testAvgFeeGroupByCurrencyAndCountry() throws SQLException {
+        ResultSet resultSet = statement.executeQuery(
+                "SELECT AVG(fee) AS avg_fee, currency, country FROM students GROUP BY currency, country;");
+        while(resultSet.next()) {
+            String currency = resultSet.getString("currency");
+            String country = resultSet.getString("country");
+            Double avgFee = resultSet.getDouble("avg_fee");
+            Double increasedAvgFee = avgFee * 1.17;
+            System.out.println(currency + " " + country + " " + avgFee + " " + increasedAvgFee);
+        }
+    }
 }
