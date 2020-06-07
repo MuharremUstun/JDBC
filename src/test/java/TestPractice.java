@@ -36,9 +36,18 @@ public class TestPractice {
             String postal_code = resultSet.getString("postal_code");
             System.out.println(name + " " + country + " " + city + " " + postal_code);
         }
+    }
 
-
-
+    @Test
+    public void test20StudentsWithHighestFee() throws SQLException {
+        ResultSet resultSet = statement.executeQuery(
+                "SELECT first_name, last_name, fee FROM students ORDER BY fee DESC LIMIT 20;");
+        while (resultSet.next()) {
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            String fee = resultSet.getString("fee");
+            System.out.println(firstName + " " + lastName + " " + fee);
+        }
     }
 
 }
