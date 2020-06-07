@@ -29,7 +29,7 @@ public class TestPractice {
     public void test() throws SQLException {
         ResultSet resultSet = statement.executeQuery(
                 "SELECT CONCAT(first_name, ' ', last_name) AS name, country, city, postal_code FROM students;");
-        while(resultSet.next()){
+        while (resultSet.next()) {
             String name = resultSet.getString("name");
             String country = resultSet.getString("country");
             String city = resultSet.getString("city");
@@ -65,7 +65,7 @@ public class TestPractice {
     public void testAvgFeeGroupByCurrencyAndCountry() throws SQLException {
         ResultSet resultSet = statement.executeQuery(
                 "SELECT AVG(fee) AS avg_fee, currency, country FROM students GROUP BY currency, country;");
-        while(resultSet.next()) {
+        while (resultSet.next()) {
             String currency = resultSet.getString("currency");
             String country = resultSet.getString("country");
             Double avgFee = resultSet.getDouble("avg_fee");
@@ -73,4 +73,57 @@ public class TestPractice {
             System.out.println(currency + " " + country + " " + avgFee + " " + increasedAvgFee);
         }
     }
+
+    @Test
+    public void test6() throws SQLException {
+        ResultSet rs = statement.executeQuery(
+                "SELECT fee FROM students WHERE gender = 'male' and country = 'United States' LIMIT 5;");
+        while (rs.next()) {
+            Double fee = rs.getDouble(1);
+            System.out.println("Fee: " + fee);
+        }
+
+        statement.execute(
+                "UPDATE students SET fee = fee + 10 WHERE gender = 'male' and country = 'United States'");
+        System.out.println("---------------------------------");
+
+        rs = statement.executeQuery(
+                "SELECT fee FROM students WHERE gender = 'male' and country = 'United States' LIMIT 5;");
+        while (rs.next()) {
+            Double fee = rs.getDouble("fee");
+            System.out.println("Fee: " + fee);
+        }
+    }
+
+    @Test
+    public void test7() throws SQLException {
+
+        PreparedStatement psSelect = connection.prepareStatement(
+                "SELECT fee FROM students WHERE gender = ? and country = ? LIMIT ?;");
+//        psSelect.setString(1, "fee".substring(1,4));
+        psSelect.setString(1, "male");
+        psSelect.setString(2, "United States");
+        psSelect.setInt(3, 5);
+        ResultSet rs = psSelect.executeQuery();
+        while (rs.next()) {
+            Double fee = rs.getDouble("fee");
+            System.out.println("Fee: " + fee);
+        }
+
+        PreparedStatement psUpdate = connection.prepareStatement(
+                "UPDATE students SET fee = fee + ? WHERE gender = ? and country = ?");
+//        psUpdate.setString(1, "fee");
+        psUpdate.setInt(1,10);
+        psUpdate.setString(2, "male");
+        psUpdate.setString(3, "United States");
+        psUpdate.executeUpdate();
+        System.out.println("---------------------------------");
+
+        rs = psSelect.executeQuery();
+        while (rs.next()) {
+            Double fee = rs.getDouble("fee");
+            System.out.println("Fee: " + fee);
+        }
+    }
+
 }
